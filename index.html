@@ -5,81 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Submit Form</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+   body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f2f2f2;
+}
 
-    .container {
-      background: #fff;
-      padding: 30px 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-    }
+form {
+  background-color: white;
+  max-width: 90%;
+  width: 350px;
+  margin: 60px auto;
+  padding: 25px 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
 
-    h2 {
-      margin-bottom: 20px;
-      font-size: 1.5em;
-      color: #333;
-    }
+form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
 
-    label {
-      display: block;
-      text-align: left;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #444;
+}
 
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
 
-    input[type="submit"] {
-      width: 100%;
-      padding: 12px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
 
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
+button:hover {
+  background-color: #45a049;
+}
 
-    .status {
-      margin-top: 15px;
-      color: #555;
-      font-size: 14px;
-    }
+.status {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #666;
+}
 
-    @media (max-width: 500px) {
-      .container {
-        padding: 20px 15px;
-      }
 
-      input[type="text"],
-      input[type="submit"] {
-        font-size: 15px;
-      }
-    }
+   @media (max-width: 500px) {
+  form {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
   </style>
 </head>
 <body>
