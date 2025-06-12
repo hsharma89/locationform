@@ -1,48 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Location Form</title>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit after inspection</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      background: #f4f4f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
-    form {
+
+    .container {
       background: #fff;
-      padding: 20px;
+      padding: 30px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 90%;
       max-width: 400px;
-      margin: auto;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input[type="text"], input[type="submit"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    .status {
       text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .status {
       margin-top: 15px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px 15px;
+      }
+
+      input[type="text"],
+      input[type="submit"] {
+        font-size: 15px;
+      }
     }
   </style>
 </head>
 <body>
 
-<h2 style="text-align:center;">Location Submission Form</h2>
+<div class="container">
+  <h2>Submit after inspection</h2>
 
-<form id="locationForm" method="POST" action="https://script.google.com/macros/s/AKfycby9jnFYeEwK0-vWNMczaRPUQ-3-Y5F9YgkxU97eX_pz8XB9IbZyH4MibLiiDS7TBfsOsw/exec">
-  <label for="name">Your Name:</label>
-  <input type="text" name="name" id="name" required>
+  <form id="locationForm" method="POST" action="https://script.google.com/macros/s/AKfycby9jnFYeEwK0-vWNMczaRPUQ-3-Y5F9YgkxU97eX_pz8XB9IbZyH4MibLiiDS7TBfsOsw/exec">
+    <label for="name">Your Name:</label>
+    <input type="text" name="name" id="name" placeholder="Enter your name" required>
+ <label for="empid">ID:</label>
+    <input type="text" name="empid" id="EmpId" placeholder="Enter your Emp ID" required>
 
-  <input type="hidden" name="lat" id="lat">
-  <input type="hidden" name="lng" id="lng">
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lng" id="lng">
 
-  <input type="submit" value="Submit Location">
-</form>
+    <input type="submit" value="Submit Location">
+  </form>
 
-<div class="status" id="status"></div>
+  <div class="status" id="status"></div>
+</div>
 
 <script>
   const latField = document.getElementById("lat");
@@ -55,17 +113,17 @@
         latField.value = position.coords.latitude;
         lngField.value = position.coords.longitude;
       }, () => {
-        statusDiv.innerText = "Location permission denied.";
+        statusDiv.innerText = "Location access denied.";
       });
     } else {
-      statusDiv.innerText = "Geolocation not supported.";
+      statusDiv.innerText = "Geolocation is not supported.";
     }
   }
 
   document.getElementById("locationForm").addEventListener("submit", function (e) {
     if (!latField.value || !lngField.value) {
       e.preventDefault();
-      statusDiv.innerText = "Please allow location access first.";
+      statusDiv.innerText = "Please allow location access before submitting.";
     } else {
       statusDiv.innerText = "Submitting...";
     }
