@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Location Tracker</title>
+</head>
+<body>
+  <h2>Submit Your Location</h2>
+  <form id="locationForm">
+    <label>Name:</label><br>
+    <input type="text" id="name" required><br><br>
+    <input type="submit" value="Submit">
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById("locationForm");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error);
+
+      function success(position) {
+        const data = {
+          name: name,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
+
+        fetch("YOUR_WEB_APP_URL_HERE", {
+          method: "POST",
+          contentType: "application/json",
+          body: JSON.stringify(data)
+        }).then(response => {
+          document.getElementById("status").textContent = "Submitted successfully!";
+          form.reset();
+        }).catch(err => {
+          document.getElementById("status").textContent = "Error submitting!";
+          console.error(err);
+        });
+      }
+
+      function error() {
+        alert("Unable to retrieve your location");
+      }
+    });
+  </script>
+</body>
+</html>
