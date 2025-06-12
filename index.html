@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Submit Form</title>
+  <title>Submit Data</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -97,54 +97,58 @@
     <div class="status" id="status"></div>
   </div>
 
-  <script>
-    const latField = document.getElementById("lat");
-    const lngField = document.getElementById("lng");
-    const statusDiv = document.getElementById("status");
+<script>
+  const latField = document.getElementById("lat");
+  const lngField = document.getElementById("lng");
+  const statusDiv = document.getElementById("status");
 
-    function saveLocationToFields(lat, lng) {
-      latField.value = lat;
-      lngField.value = lng;
-      sessionStorage.setItem("lat", lat);
-      sessionStorage.setItem("lng", lng);
+  function setLocation(lat, lng) {
+    latField.value = lat;
+    lngField.value = lng;
+    sessionStorage.setItem("lat", lat);
+    sessionStorage.setItem("lng", lng);
+  }
+
+  function getLocation(callback) {
+    const savedLat = sessionStorage.getItem("lat");
+    const savedLng = sessionStorage.getItem("lng");
+
+    if (savedLat && savedLng) {
+      setLocation(savedLat, savedLng);
+      if (callback) callback();
+      return;
     }
 
-    function getLocation() {
-      const savedLat = sessionStorage.getItem("lat");
-      const savedLng = sessionStorage.getItem("lng");
-
-      if (savedLat && savedLng) {
-        latField.value = savedLat;
-        lngField.value = savedLng;
-        console.log("Location loaded from sessionStorage.");
-        return;
-      }
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          saveLocationToFields(lat, lng);
-          console.log("Location fetched from browser.");
-        }, () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          setLocation(position.coords.latitude, position.coords.longitude);
+          if (callback) callback();
+        },
+        error => {
           statusDiv.innerText = "Location access denied.";
-        });
-      } else {
-        statusDiv.innerText = "Geolocation is not supported.";
-      }
+        }
+      );
+    } else {
+      statusDiv.innerText = "Geolocation is not supported.";
     }
+  }
 
-    document.getElementById("locationForm").addEventListener("submit", function (e) {
-      if (!latField.value || !lngField.value) {
-        e.preventDefault();
-        statusDiv.innerText = "Please allow location access before submitting.";
-      } else {
-        statusDiv.innerText = "Submitting...";
-      }
-    });
+  document.getElementById("locationForm").addEventListener("submit", function (e) {
+    if (!latField.value || !lngField.value) {
+      e.preventDefault();
+      statusDiv.innerText = "Please allow location access before submitting.";
+      getLocation(() => {
+        statusDiv.innerText = "Location fetched. Please submit again.";
+      });
+    } else {
+      statusDiv.innerText = "Submitting...";
+    }
+  });
 
-    window.onload = getLocation;
-  </script>
+  window.onload = () => getLocation();
+</script>
+
 
 </body>
 </html>
