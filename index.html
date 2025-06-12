@@ -1,55 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Location Tracker</title>
+  <title>Location Form</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f4f4f4;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="text"], input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .status {
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Submit Your Location</h2>
- <form method="POST" action="https://script.google.com/macros/s/AKfycby9jnFYeEwK0-vWNMczaRPUQ-3-Y5F9YgkxU97eX_pz8XB9IbZyH4MibLiiDS7TBfsOsw/exec">
-    <label>Name:</label><br>
-    <input type="text" id="name" required><br><br>
-    <input type="submit" value="Submit">
-  </form>
 
-  <p id="status"></p>
+<h2 style="text-align:center;">Location Submission Form</h2>
 
-  <script>
-    const form = document.getElementById("locationForm");
-    form.addEventListener("submit", function (e) {
+<form id="locationForm" method="POST" action="https://script.google.com/macros/s/AKfycby9jnFYeEwK0-vWNMczaRPUQ-3-Y5F9YgkxU97eX_pz8XB9IbZyH4MibLiiDS7TBfsOsw/exec">
+  <label for="name">Your Name:</label>
+  <input type="text" name="name" id="name" required>
+
+  <input type="hidden" name="lat" id="lat">
+  <input type="hidden" name="lng" id="lng">
+
+  <input type="submit" value="Submit Location">
+</form>
+
+<div class="status" id="status"></div>
+
+<script>
+  const latField = document.getElementById("lat");
+  const lngField = document.getElementById("lng");
+  const statusDiv = document.getElementById("status");
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        latField.value = position.coords.latitude;
+        lngField.value = position.coords.longitude;
+      }, () => {
+        statusDiv.innerText = "Location permission denied.";
+      });
+    } else {
+      statusDiv.innerText = "Geolocation not supported.";
+    }
+  }
+
+  document.getElementById("locationForm").addEventListener("submit", function (e) {
+    if (!latField.value || !lngField.value) {
       e.preventDefault();
-      const name = document.getElementById("name").value;
+      statusDiv.innerText = "Please allow location access first.";
+    } else {
+      statusDiv.innerText = "Submitting...";
+    }
+  });
 
-      if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser");
-        return;
-      }
+  window.onload = getLocation;
+</script>
 
-      navigator.geolocation.getCurrentPosition(success, error);
-
-      function success(position) {
-        const data = {
-          name: name,
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        };
-
-        fetch("https://script.google.com/macros/s/AKfycbyAWq6cGbERVbUpq2I5NpzBmDU2MZsoTgHRYD-niFyS5ZUE5TWafo3a1oNiAaWVQiUSAw/exec", {
-          method: "POST",
-          contentType: "application/json",
-          body: JSON.stringify(data)
-        }).then(response => {
-          document.getElementById("status").textContent = "Submitted successfully!";
-          form.reset();
-        }).catch(err => {
-          document.getElementById("status").textContent = "Error submitting!";
-          console.error(err);
-        });
-      }
-
-      function error() {
-        alert("Unable to retrieve your location");
-      }
-    });
-  </script>
 </body>
 </html>
